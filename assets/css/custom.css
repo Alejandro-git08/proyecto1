@@ -1,3 +1,158 @@
+/*Variable de colores*/
+:root {
+  --primary-color: #e91e63; /* Rosa principal, lo cambie por el menta */
+  --secondary-color: #2b2b2b; /* Gris oscuro */
+  --light-color: #f8e9ee; /* Rosa muy claro, era el gris */
+  --white-color: #ffffff;
+  --dark-color: #212529;
+  --font-main: 'Poppins', sans-serif; /*letras normales*/
+  --font-headings: 'Playfair Display', serif; /*titulos*/
+}
+
+
+
+/*tipografia*/
+body, ul, li, p, label, input, div {
+  font-family: var(--font-main);
+  font-size: 18px !important;
+  font-weight: 300 !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-headings) !important;
+}
+
+.h1 { font-size: 48px !important; font-weight: 200 !important; }
+.h2 { font-size: 30px !important; font-weight: 300; }
+.h3 { font-size: 22px !important; }
+.logo { font-weight: 500 !important; }
+
+
+
+.text-warning { color: var(--primary-color) !important; }
+.text-success { color: var(--primary-color) !important; }
+.bg-success { background-color: var(--primary-color) !important; }
+
+.btn-success {
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+.pagination .page-link:hover,
+.pagination .page-link.active { 
+  background-color: #c2185b; 
+  color: var(--white-color); 
+}
+
+.text-muted { color: #bcbcbc !important; }
+.text-light { color: var(--light-color) !important; }
+.bg-dark { background-color: var(--secondary-color) !important; }
+.bg-light { background-color: var(--light-color) !important; }
+.bg-black { background-color: var(--secondary-color) !important; }
+
+
+
+/*barra de contacto*/
+#templatemo_nav_top {
+  background-color: var(--secondary-color) !important;
+}
+
+#templatemo_nav_top a,
+#templatemo_nav_top i {
+  color: var(--white-color) !important;
+}
+
+#templatemo_nav_top a:hover {
+  color: var(--primary-color) !important;
+}
+
+
+/* barra de navegación */
+#templatemo_main_nav a {
+  color: var(--secondary-color);
+  font-family: var(--font-main) !important; 
+}
+
+#templatemo_main_nav a:hover {
+  color: var(--primary-color);
+}
+
+
+/* Título de la barra de navegación */
+.navbar-brand {
+  font-family: var(--font-headings) !important; 
+}
+
+/* Carrusel */
+#template-mo-zay-hero-carousel { background: var(--light-color) !important; }
+#template-mo-zay-hero-carousel .carousel-indicators li { background-color: var(--primary-color); }
+#template-mo-zay-hero-carousel .carousel-control-next i,
+#template-mo-zay-hero-carousel .carousel-control-prev i { 
+  color: var(--primary-color) !important; 
+  font-size: 2.8em !important; 
+}
+
+
+/* productos */
+.product-wap { box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.10); }
+.product-wap .product-color-dot.color-dot-red { background:#f71515; }
+.product-wap .product-color-dot.color-dot-blue { background:#6db4fe; }
+.product-wap .product-color-dot.color-dot-black { background:#000000; }
+.product-wap .product-color-dot.color-dot-light { background:#e0e0e0; }
+.product-wap .product-color-dot.color-dot-green { background: var(--primary-color); }
+
+.card.product-wap .card .product-overlay {
+  background: rgba(0,0,0,.2);
+  visibility: hidden;
+  opacity: 0;
+  transition: .3s;
+}
+.card.product-wap:hover .card .product-overlay {
+  visibility: visible;
+  opacity: 1;
+}
+.card.product-wap a { color: #000; }
+
+
+/**/
+.brand-img { filter: grayscale(100%); opacity: 0.5; transition: .5s; }
+.brand-img:hover { filter: grayscale(0%); opacity: 1; }
+
+
+/*footer*/
+#tempaltemo_footer,
+#tempaltemo_footer .w-100.bg-black,
+#tempaltemo_footer .bg-dark {
+  background-color: var(--secondary-color) !important;
+  color: var(--white-color) !important;
+}
+
+#tempaltemo_footer a,
+#tempaltemo_footer .footer-link-list li a,
+#tempaltemo_footer .footer-icons a {
+  color: var(--white-color) !important;
+}
+
+#tempaltemo_footer a:hover,
+#tempaltemo_footer .footer-link-list li a:hover,
+#tempaltemo_footer .footer-icons a:hover {
+  color: var(--primary-color) !important;
+}
+
 /*
-Custom Css
+#tempaltemo_footer h2, 
+#tempaltemo_footer h3, 
+#tempaltemo_footer h4, 
+#tempaltemo_footer h5, 
+#tempaltemo_footer h6 {
+  font-family: var(--font-headings) !important;
+  color: var(--white-color) !important;
+}
 */
+
+@media (max-width: 991px) {
+  .product-wap .h3, .product-wap li, .product-wap i, .product-wap p { font-size: 16px !important; }
+}
+
+
+
