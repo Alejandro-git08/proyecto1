@@ -75,7 +75,7 @@ if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] != 'admin') {
                         <i class="fa fa-tags fa-3x text-success mb-3"></i>
                         <h5 class="card-title">Categorías</h5>
                         <p class="card-text">Agregar o eliminar categorías para organizar productos.</p>
-                        <a href="categorias_admin.php" class="btn btn-success">Administrar</a>
+                        <a href="index.php?controller=categorias&action=index" class="btn btn-success">Administrar</a>
                     </div>
                 </div>
             </div>
