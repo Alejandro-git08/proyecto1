@@ -15,7 +15,11 @@ class logincontroller {
                 $_SESSION['id_usuario'] = $user['id_usuario'];
                 $_SESSION['nombre'] = $user['nombre'];
                 $_SESSION['rol'] = $user['rol'];
-                header('Location: index.php?controller=home&action=index');
+                if($user['rol'] === 'admin') {
+                    header('Location: index.php?controller=home&action=admin');
+                } else {
+                    header('Location: index.php?controller=home&action=index');
+                }
                 exit;
             }
         }
@@ -42,14 +46,22 @@ class logincontroller {
                     setcookie('usuario_logueado', $user['id_usuario'], time() + (30*24*60*60), "/"); // 30 días
                 }
 
-                header('Location: index.php?controller=home&action=index');
+                if($user['rol'] === 'admin') {
+                    header('Location: index.php?controller=home&action=admin');
+                } else {
+                    header('Location: index.php?controller=home&action=index');
+                }
                 exit;
             } else {
                 $error = "Email o contraseña incorrectos.";
                 require 'views/login.php';
             }
         } else {
-            header('Location: index.php?controller=login&action=index');
+            if($user['rol'] === 'admin') {
+                header('Location: index.php?controller=home&action=admin');
+            } else {
+                header('Location: index.php?controller=home&action=index');
+            }
             exit;
         }
     }
@@ -85,7 +97,14 @@ class logincontroller {
         session_start();   // Asegúrate de iniciar sesión
         session_unset();   // Limpia variables de sesión
         session_destroy(); // Destruye la sesión
-        header("Location: index.php?controller=login&action=index"); // Redirige al login
+
+        // Borrar cookie de recordarme si existe
+        if(isset($_COOKIE['usuario_logueado'])) {
+            setcookie('usuario_logueado', '', time() - 3600, "/");
+        }
+
+        // Redirigir al login
+        header("Location: index.php?controller=login&action=index");
         exit;
     }
 }
@@ -93,6 +112,6 @@ class logincontroller {
 /*
 
 Para más seguridad se podria hashear la contraseña, pero hay que cambiar el procedimiento en la BD 
-No se porque no se puede cerrar sesión
+No se porque no se puede cerrar sesión (arreglado)
 
 */
