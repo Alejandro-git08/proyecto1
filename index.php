@@ -11,7 +11,7 @@ $controllerFile = "controllers/" . strtolower($controller) . "controller.php";
 if (file_exists($controllerFile)) {
     require_once $controllerFile;
 
-    $controllerClass = strtolower($controller) . "controller"; // Nombre en minúscula
+    $controllerClass = strtolower($controller) . "controller"; // Usen archivos en minúscula
 
     if (class_exists($controllerClass)) {
         $controllerInstance = new $controllerClass();
@@ -27,6 +27,14 @@ if (file_exists($controllerFile)) {
 } else {
     echo "Error: El archivo del controlador '$controllerFile' no existe.";
 }
+
+/*
+
+Tener cuidado con los nombres de archivos, solo en minuscula. 
+Se puede mejorar la seguridad con un arreglo de controladores permtidos, pero no de momento.
+Se puede mejorar los mensajes de error. 
+
+*/
 
 
 

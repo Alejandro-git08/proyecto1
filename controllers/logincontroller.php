@@ -5,6 +5,21 @@ class logincontroller {
 
     // Mostrar formulario de login
     public function index() {
+
+        // Verificar cookie
+        if (!isset($_SESSION['id_usuario']) && isset($_COOKIE['usuario_logueado'])) {
+            $usuario = new usuario();
+            $user = $usuario->getById($_COOKIE['usuario_logueado']); // Método que ya definimos en el modelo
+
+            if ($user) {
+                $_SESSION['id_usuario'] = $user['id_usuario'];
+                $_SESSION['nombre'] = $user['nombre'];
+                $_SESSION['rol'] = $user['rol'];
+                header('Location: index.php?controller=home&action=index');
+                exit;
+            }
+        }
+
         require 'views/login.php';
     }
 
@@ -21,6 +36,11 @@ class logincontroller {
                 $_SESSION['id_usuario'] = $user['id_usuario'];
                 $_SESSION['nombre'] = $user['nombre'];
                 $_SESSION['rol'] = $user['rol'];
+
+                // Crear cookie para mantener sesión (30 días)
+                if (isset($_POST['recordarme'])) {
+                    setcookie('usuario_logueado', $user['id_usuario'], time() + (30*24*60*60), "/"); // 30 días
+                }
 
                 header('Location: index.php?controller=home&action=index');
                 exit;
@@ -61,3 +81,9 @@ class logincontroller {
         }
     }
 }
+
+/*
+
+Para más seguridad se podria hashear la contraseña, pero hay que cambiar el procedimiento en la BD 
+
+*/

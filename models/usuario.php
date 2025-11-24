@@ -1,31 +1,39 @@
 <?php
+require_once 'config/database.php';
+
 class usuario {
     private $db;
 
     public function __construct() {
-        $this->db = new mysqli("localhost", "root", "", "ecommerce");
-        if ($this->db->connect_error) {
-            die("Error de conexión: " . $this->db->connect_error);
-        }
+        $database = new Database();
+        $this->db = $database->getConnection();
     }
 
-    // Login usando procedimiento almacenado
     public function login($email, $password) {
-        $stmt = $this->db->prepare("CALL login_usuario(?, ?)");
-        $stmt->bind_param("ss", $email, $password);
+        $stmt = $this->db->prepare("CALL login_usuario(:email, :password)");
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':password', $password); 
         $stmt->execute();
-        $result = $stmt->get_result();
-        $user = $result->fetch_assoc();
-        $stmt->close();
-        return $user;
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // Crear usuario usando procedimiento almacenado
     public function crear($rol, $nombre, $apellido, $email, $contrasena, $telefono) {
-        $stmt = $this->db->prepare("CALL crear_usuario(?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssssss", $rol, $nombre, $apellido, $email, $contrasena, $telefono);
+        $stmt = $this->db->prepare("CALL crear_usuario(:rol, :nombre, :apellido, :email, :contrasena, :telefono)");
+        $stmt->bindParam(':rol', $rol);
+        $stmt->bindParam(':nombre', $nombre);
+        $stmt->bindParam(':apellido', $apellido);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':contrasena', $contrasena);
+        $stmt->bindParam(':telefono', $telefono);
         $stmt->execute();
-        $stmt->close();
+    }
+
+    // Nuevo método para obtener usuario por ID (para cookie)
+    public function getById($id_usuario) {
+        $stmt = $this->db->prepare("SELECT id_usuario, nombre, rol FROM Usuario WHERE id_usuario = :id");
+        $stmt->bindParam(':id', $id_usuario);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }
 
