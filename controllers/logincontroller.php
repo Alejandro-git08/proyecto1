@@ -80,10 +80,19 @@ class logincontroller {
             require 'views/registro.php';
         }
     }
+
+    public function logout(){
+        session_start();   // Asegúrate de iniciar sesión
+        session_unset();   // Limpia variables de sesión
+        session_destroy(); // Destruye la sesión
+        header("Location: index.php?controller=login&action=index"); // Redirige al login
+        exit;
+    }
 }
 
 /*
 
 Para más seguridad se podria hashear la contraseña, pero hay que cambiar el procedimiento en la BD 
+No se porque no se puede cerrar sesión
 
 */

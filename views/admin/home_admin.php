@@ -28,7 +28,7 @@ if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] != 'admin') {
     <!-- Header Admin -->
     <nav class="navbar navbar-expand-lg navbar-light shadow bg-dark">
         <div class="container d-flex justify-content-between align-items-center">
-            <a class="navbar-brand text-success logo h1" href="index.php">
+            <a class="navbar-brand text-success logo h1" href="index.php?controller=home&action=index">
                 Admin Tienda V
             </a>
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#admin_nav" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,11 +36,11 @@ if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] != 'admin') {
             </button>
             <div class="collapse navbar-collapse" id="admin_nav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link text-light" href="home_admin.php">Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link text-light" href="productos_admin.php">Productos</a></li>
-                    <li class="nav-item"><a class="nav-link text-light" href="categorias_admin.php">Categorías</a></li>
-                    <li class="nav-item"><a class="nav-link text-light" href="usuarios_admin.php">Usuarios</a></li>
-                    <li class="nav-item"><a class="nav-link text-light" href="logout.php">Cerrar sesión</a></li>
+                    <li class="nav-item"><a class="nav-link text-light" href="index.php?controller=home&action=index">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link text-light" href="index.php?controller=productos&action=verProductos">Productos</a></li>
+                    <li class="nav-item"><a class="nav-link text-light" href="index.php?controller=categorias&action=index">Categorías</a></li>
+                    <li class="nav-item"><a class="nav-link text-light" href="index.php?controller=usuarios&action=index">Usuarios</a></li>
+                    <li class="nav-item"><a class="nav-link text-light" href="index.php?controller=login&action=logout">Cerrar sesión</a></li>
                 </ul>
             </div>
         </div>
@@ -63,7 +63,7 @@ if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] != 'admin') {
                         <i class="fa fa-box fa-3x text-success mb-3"></i>
                         <h5 class="card-title">Productos</h5>
                         <p class="card-text">Agregar, editar o eliminar productos de la tienda.</p>
-                        <a href="index.php?controller=productos&action=index" class="btn btn-success">Administrar</a>
+                        <a href="index.php?controller=productos&action=verProductos" class="btn btn-success">Administrar</a>
                     </div>
                 </div>
             </div>
@@ -87,7 +87,7 @@ if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] != 'admin') {
                         <i class="fa fa-users fa-3x text-success mb-3"></i>
                         <h5 class="card-title">Usuarios</h5>
                         <p class="card-text">Ver, editar o eliminar cuentas de usuarios registrados.</p>
-                        <a href="usuarios_admin.php" class="btn btn-success">Administrar</a>
+                        <a href="index.php?controller=usuarios&action=index" class="btn btn-success">Administrar</a>
                     </div>
                 </div>
             </div>

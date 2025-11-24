@@ -2,30 +2,74 @@
 class Producto {
     private $db;
 
-    public function __construct() {
-        $this->db = new mysqli("localhost", "root", "", "ecommerce");
-        if ($this->db->connect_error) {
-            die("Error de conexión: " . $this->db->connect_error);
+    public function __construct($conexion){
+        $this->db = $conexion;
+    }
+
+    // Listar productos
+    public function listar(){
+        $stmt = $this->db->prepare("CALL listar_productos()");
+        $stmt->execute();
+        $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt->closeCursor();
+        return $productos;
+    }
+
+    // Crear producto
+    public function crear($nombre, $precio, $stock, $imagen, $descripcion, $id_categoria){
+        $stmt = $this->db->prepare("CALL crear_producto(:nombre, :precio, :stock, :imagen, :descripcion, :id_categoria)");
+        $stmt->bindParam(':nombre', $nombre);
+        $stmt->bindParam(':precio', $precio);
+        $stmt->bindParam(':stock', $stock, PDO::PARAM_INT);
+        $stmt->bindParam(':imagen', $imagen);
+        $stmt->bindParam(':descripcion', $descripcion);
+        $stmt->bindParam(':id_categoria', $id_categoria, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
+    // Buscar producto
+    public function buscar($id){
+        $stmt = $this->db->prepare("CALL buscar_producto(:id)");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $producto = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt->closeCursor();
+        return $producto;
+    }
+
+    // Actualizar producto
+    public function actualizar($id, $nombre, $precio, $stock, $imagen, $descripcion, $id_categoria){
+        $stmt = $this->db->prepare("CALL actualizar_producto(:id, :nombre, :precio, :stock, :imagen, :descripcion, :id_categoria)");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':nombre', $nombre);
+        $stmt->bindParam(':precio', $precio);
+        $stmt->bindParam(':stock', $stock, PDO::PARAM_INT);
+        $stmt->bindParam(':imagen', $imagen);
+        $stmt->bindParam(':descripcion', $descripcion);
+        $stmt->bindParam(':id_categoria', $id_categoria, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
+    // Eliminar producto
+    public function eliminar($id){
+        $stmt = $this->db->prepare("CALL eliminar_producto(:id)");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
+    // Listar categorías
+    public function listarCategorias($genero = "todos"){
+        $stmt = $this->db->prepare("CALL listar_categorias()");
+        $stmt->execute();
+        $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt->closeCursor();
+
+        $resultado = [];
+        foreach($categorias as $cat){
+            if($genero === "todos" || $cat['id_padre'] == $genero){
+                $resultado[] = $cat;
+            }
         }
-    }
-
-    public function listar() {
-        $result = $this->db->query("SELECT * FROM Producto");
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
-
-    public function crear($nombre, $precio, $stock, $imagen, $descripcion, $id_categoria) {
-        $stmt = $this->db->prepare("CALL crear_producto(?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("sdssis", $nombre, $precio, $stock, $imagen, $descripcion, $id_categoria);
-        $stmt->execute();
-        $stmt->close();
-    }
-
-    public function eliminar($id_producto) {
-        $stmt = $this->db->prepare("DELETE FROM Producto WHERE id_producto = ?");
-        $stmt->bind_param("i", $id_producto);
-        $stmt->execute();
-        $stmt->close();
+        return $resultado;
     }
 }
-

@@ -1,42 +1,85 @@
 <?php
-// models/categoria.php
-require_once 'config/database.php';
-
 class Categoria {
-    private $conn;
+    private $db;
 
-    public function __construct() {
-        $database = new Database();
-        $this->conn = $database->getConnection();
+    public function __construct($conexion) {
+        $this->db = $conexion;
     }
 
-    public function getAll() {
-        $sql = "SELECT * FROM categoria";
-        $stmt = $this->conn->prepare($sql);
+    // Listar categorías (excluyendo id 1 y 2)
+    public function listar($genero = "todos") {
+        $sql = "CALL listar_categorias()";
+        $stmt = $this->db->prepare($sql);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $resultado = [];
+        foreach($categorias as $row){
+            if($row['id_categoria'] != 1 && $row['id_categoria'] != 2){
+                if($genero == "todos" || $row['id_padre'] == $genero){
+                    $resultado[] = $row;
+                }
+            }
+        }
+        $stmt->closeCursor();
+        return $resultado;
     }
 
-    public function getById($id) {
-    $stmt = $this->conn->prepare("SELECT * FROM categoria WHERE id = ?");
-    $stmt->execute([$id]); // PASAMOS EL PARÁMETRO EN UN ARRAY
-    return $stmt->fetch(PDO::FETCH_ASSOC);
+    // Crear categoría
+    public function crear($nombre, $id_padre) {
+        $stmt = $this->db->prepare("CALL crear_categoria(:nombre, :id_padre)");
+        $stmt->bindParam(':nombre', $nombre);
+        $stmt->bindParam(':id_padre', $id_padre, PDO::PARAM_INT);
+        $stmt->execute();
+        $stmt->closeCursor();
     }
 
-    public function create($nombre) {
-        $stmt = $this->conn->prepare("INSERT INTO categoria(nombre) VALUES(?)");
-        return $stmt->execute([$nombre]); // PASAMOS EL PARÁMETRO EN UN ARRAY
+    // Buscar categoría por id
+    public function buscar($id) {
+        $stmt = $this->db->prepare("CALL buscar_categoria(:id)");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $categoria = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt->closeCursor();
+        return $categoria;
     }
 
-    public function update($id, $nombre) {
-        $stmt = $this->conn->prepare("UPDATE categoria SET nombre=? WHERE id=?");
-        return $stmt->execute([$nombre, $id]); // PASAMOS LOS PARÁMETROS EN ORDEN
+    // Actualizar categoría
+    public function actualizar($id, $nombre, $id_padre) {
+        $stmt = $this->db->prepare("CALL actualizar_categoria(:id, :nombre, :id_padre)");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':nombre', $nombre);
+        $stmt->bindParam(':id_padre', $id_padre, PDO::PARAM_INT);
+        $stmt->execute();
+        $stmt->closeCursor();
     }
 
-    public function delete($id) {
-        $stmt = $this->conn->prepare("DELETE FROM categoria WHERE id=?");
-        return $stmt->execute([$id]); // PASAMOS EL PARÁMETRO EN UN ARRAY
+    // Eliminar categoría
+    public function eliminar($id) {
+        $stmt = $this->db->prepare("CALL eliminar_categoria(:id)");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $stmt->closeCursor();
     }
 
+    // Obtener productos por categoría
+    public function obtenerProductos($id_categoria) {
+        $stmt = $this->db->prepare("
+            SELECT 
+                p.id_producto,
+                p.nombre_producto,
+                p.precio,
+                p.stock,
+                p.imagen,
+                p.descripcion_producto
+            FROM Producto p
+            WHERE p.id_categoria = :id_categoria
+        ");
+        $stmt->bindParam(':id_categoria', $id_categoria, PDO::PARAM_INT);
+        $stmt->execute();
+        $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt->closeCursor();
+        return $productos;
+    }
 }
 ?>

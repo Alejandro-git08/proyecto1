@@ -1,45 +1,104 @@
 <?php
-require_once 'models/producto.php';
+require_once "models/producto.php";
 
-class productoscontroller {
+class ProductosController {
+    private $model;
+    private $db;
 
-    public function index() {
-        if ($_SESSION['rol'] != 'admin') {
-            header('Location: index.php?controller=login&action=index');
+    public function __construct(){
+        try {
+            $this->db = new PDO("mysql:host=localhost;dbname=ecommerce;charset=utf8","root","");
+            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch(PDOException $e){
+            die("Error de conexión: " . $e->getMessage());
+        }
+        $this->model = new Producto($this->db);
+    }
+
+    public function verProductos(){
+        $categorias = $this->model->listarCategorias(); // Necesario para el select
+
+        $id_buscar = $_GET['id_buscar'] ?? null;
+        $categoria_buscar = $_GET['categoria_buscar'] ?? null;
+
+        $productos = $this->model->listar(); // Lista todos inicialmente
+
+        // Filtrar por ID
+        if($id_buscar){
+            $productos = array_filter($productos, fn($p) => isset($p['id_producto']) && $p['id_producto'] == $id_buscar);
+        }
+
+        // Filtrar por categoría
+        if($categoria_buscar){
+            $productos = array_filter($productos, fn($p) => $p['categoria'] == $categoria_buscar);
+        }
+
+        require_once "views/admin/productos/productos_ver.php";
+    }
+
+    public function crear(){
+        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+            // Manejo de imagen
+            $nombreImagen = null;
+            if(isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK){
+                $carpetaDestino = "assets/img/productos/";
+                if(!is_dir($carpetaDestino)){
+                    mkdir($carpetaDestino, 0777, true);
+                }
+
+                $nombreArchivo = basename($_FILES['imagen']['name']);
+                $rutaDestino = $carpetaDestino . $nombreArchivo;
+
+                if(move_uploaded_file($_FILES['imagen']['tmp_name'], $rutaDestino)){
+                    $nombreImagen = $rutaDestino;
+                }
+            }
+
+            $this->model->crear(
+                $_POST['nombre'],
+                $_POST['precio'],
+                $_POST['stock'],
+                $nombreImagen,
+                $_POST['descripcion'],
+                $_POST['id_categoria']
+            );
+
+            header("Location: index.php?controller=productos&action=verProductos");
             exit;
-        }
-
-        $producto = new Producto();
-        $productos = $producto->listar();
-        require 'views/productos.php';
-    }
-
-    public function crear() {
-        $categorias = [];
-        require 'views/crear_producto.php';
-    }
-
-    public function guardar() {
-        if (isset($_POST['nombre'], $_POST['precio'], $_POST['stock'], $_POST['id_categoria'])) {
-            $nombre = $_POST['nombre'];
-            $precio = $_POST['precio'];
-            $stock = $_POST['stock'];
-            $imagen = $_POST['imagen'] ?? '';
-            $descripcion = $_POST['descripcion'] ?? '';
-            $id_categoria = $_POST['id_categoria'];
-
-            $producto = new Producto();
-            $producto->crear($nombre, $precio, $stock, $imagen, $descripcion, $id_categoria);
-
-            header('Location: index.php?controller=productos&action=index');
+        } else {
+            // ✅ Aquí cargamos las categorías para la vista
+            $categorias = $this->model->listarCategorias();
+            require_once "views/admin/productos/productos_crear.php";
         }
     }
 
-    public function eliminar() {
-        if (isset($_GET['id'])) {
-            $producto = new Producto();
-            $producto->eliminar($_GET['id']);
-            header('Location: index.php?controller=productos&action=index');
+    public function editar(){
+        $id = $_GET['id'];
+        $producto = $this->model->buscar($id);
+
+        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+            $this->model->actualizar(
+                $id,
+                $_POST['nombre'],
+                $_POST['precio'],
+                $_POST['stock'],
+                $_POST['imagen'],
+                $_POST['descripcion'],
+                $_POST['id_categoria']
+            );
+            header("Location: index.php?controller=productos&action=verProductos");
+            exit;
+        } else {
+            $categorias = $this->model->listarCategorias();
+            require_once "views/admin/productos/productos_editar.php";
         }
     }
+
+    public function eliminar(){
+        $id = $_GET['id'];
+        $this->model->eliminar($id);
+        header("Location: index.php?controller=productos&action=verProductos");
+        exit;
+    }
+
 }
