@@ -21,7 +21,7 @@ if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] != 'admin') {
 
 <nav class="navbar navbar-dark bg-dark">
     <div class="container-fluid">
-        <span class="navbar-brand">Panel Admin</span>
+        <span class="navbar-brand">Formulario Usuario</span>
         <a href="index.php?controller=usuarios&action=index" class="btn btn-outline-light">Volver</a>
     </div>
 </nav>

@@ -5,7 +5,7 @@ class Producto {
     public function __construct($conexion){
         $this->db = $conexion;
     }
-
+    /*
     // Listar productos
     public function listar(){
         $stmt = $this->db->prepare("CALL listar_productos()");
@@ -14,7 +14,7 @@ class Producto {
         $stmt->closeCursor();
         return $productos;
     }
-
+    */
     // Crear producto
     public function crear($nombre, $precio, $stock, $imagen, $descripcion, $id_categoria){
         $stmt = $this->db->prepare("CALL crear_producto(:nombre, :precio, :stock, :imagen, :descripcion, :id_categoria)");
@@ -72,4 +72,33 @@ class Producto {
         }
         return $resultado;
     }
+
+    public function listarUltimos5(){
+        $stmt = $this->db->prepare("
+            SELECT * 
+            FROM producto
+            ORDER BY id_producto DESC
+            LIMIT 6
+        ");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function listar($genero = 'todos', $categoria = null){
+        $stmt = $this->db->prepare("CALL listar_productos(:genero, :categoria)");
+        $stmt->bindParam(':genero', $genero, PDO::PARAM_STR);
+
+        if($categoria === null){
+            $stmt->bindValue(':categoria', null, PDO::PARAM_NULL);
+        } else {
+            $stmt->bindParam(':categoria', $categoria, PDO::PARAM_INT);
+        }
+
+        $stmt->execute();
+        $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt->closeCursor();
+        return $productos;
+    }
+
+
 }

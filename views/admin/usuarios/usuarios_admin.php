@@ -29,16 +29,26 @@ if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] != 'admin') {
 </head>
 <body class="bg-light">
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-    <div class="container">
-        <a class="navbar-brand text-success" href="index.php?controller=home&action=index">Admin Tienda V</a>
-        <ul class="navbar-nav">
-            <li class="nav-item"><a class="nav-link text-light" href="index.php?controller=home&action=index">Dashboard</a></li>
-            <li class="nav-item"><a class="nav-link text-light fw-bold" href="index.php?controller=usuarios&action=index">Usuarios</a></li>
-            <li class="nav-item"><a class="nav-link text-light" href="index.php?controller=login&action=logout">Cerrar sesión</a></li>
-        </ul>
-    </div>
-</nav>
+    <!-- Header Admin -->
+    <nav class="navbar navbar-expand-lg navbar-light shadow bg-dark">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a class="navbar-brand text-success logo h1" href="index.php?controller=home&action=index">
+                Admin Tienda V
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#admin_nav" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="admin_nav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link text-light" href="index.php?controller=home&action=index">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link text-light" href="index.php?controller=productos&action=verProductos">Productos</a></li>
+                    <li class="nav-item"><a class="nav-link text-light" href="index.php?controller=categorias&action=index">Categorías</a></li>
+                    <li class="nav-item"><a class="nav-link text-light" href="index.php?controller=usuarios&action=index">Usuarios</a></li>
+                    <li class="nav-item"><a class="nav-link text-light" href="index.php?controller=login&action=logout">Cerrar sesión</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
 <div class="container py-4 content">
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -97,6 +107,13 @@ if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] != 'admin') {
             <?php endforeach; ?>
         </tbody>
     </table>
+
+    <!-- Botón regresar -->
+    <div class="row mt-3">
+        <div class="col text-start">
+            <a href="index.php?controller=home&action=index" class="btn btn-secondary">Regresar</a>
+        </div>
+    </div>
 </div>
 
 <footer class="bg-dark text-light text-center py-3 mt-auto">

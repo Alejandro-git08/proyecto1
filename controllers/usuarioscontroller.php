@@ -59,6 +59,8 @@ class UsuariosController {
         $this->usuarioModel->eliminar($id);
         header("Location: index.php?controller=usuarios&action=index");
     }
+
+
 }
 
 

@@ -46,22 +46,16 @@ class logincontroller {
                     setcookie('usuario_logueado', $user['id_usuario'], time() + (30*24*60*60), "/"); // 30 días
                 }
 
-                if($user['rol'] === 'admin') {
-                    header('Location: index.php?controller=home&action=admin');
-                } else {
-                    header('Location: index.php?controller=home&action=index');
-                }
+                // Redirigir siempre a home index; el homecontroller decidirá la vista
+                header('Location: index.php?controller=home&action=index');
                 exit;
             } else {
                 $error = "Email o contraseña incorrectos.";
                 require 'views/login.php';
             }
         } else {
-            if($user['rol'] === 'admin') {
-                header('Location: index.php?controller=home&action=admin');
-            } else {
-                header('Location: index.php?controller=home&action=index');
-            }
+            // Si no hay email o password, redirigir a login
+            header('Location: index.php?controller=login&action=index');
             exit;
         }
     }

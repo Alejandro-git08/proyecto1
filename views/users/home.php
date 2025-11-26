@@ -1,6 +1,3 @@
-<?php
-// views/home.php
-?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -45,7 +42,7 @@
     <!-- Header -->
     <nav class="navbar navbar-expand-lg navbar-light shadow">
         <div class="container d-flex justify-content-between align-items-center">
-            <a class="navbar-brand text-success logo h1 align-self-center" href="index.php">
+            <a class="navbar-brand text-success logo h1 align-self-center" href="index.php?controller=home&action=index">
                 Tienda V
             </a>
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#templatemo_main_nav"
@@ -55,20 +52,24 @@
             <div class="align-self-center collapse navbar-collapse flex-fill  d-lg-flex justify-content-lg-between" id="templatemo_main_nav">
                 <div class="flex-fill">
                     <ul class="nav navbar-nav d-flex justify-content-between mx-lg-auto">
-                        <li class="nav-item"><a class="nav-link" href="index.php">Inicio</a></li>
-                        <li class="nav-item"><a class="nav-link" href="about.html">Sobre nosotros</a></li>
-                        <li class="nav-item"><a class="nav-link" href="shop.html">Tienda</a></li>
-                        <li class="nav-item"><a class="nav-link" href="contact.html">Contacto</a></li>
+                        <li class="nav-item"><a class="nav-link" href="index.php?controller=home&action=index">Inicio</a></li>
+                        <li class="nav-item"><a class="nav-link" href="index.php?controller=tienda&action=index">Tienda</a></li>
+                        <li class="nav-item"><a class="nav-link" href="index.php?controller=cliente&action=verPedidos">Pedidos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="index.php?controller=login&action=logout">Cerrar sesión</a></li>
                     </ul>
                 </div>
                 <div class="navbar align-self-center d-flex">
-                    <a class="nav-icon position-relative text-decoration-none" href="#">
+                    <a class="nav-icon position-relative text-decoration-none" href="index.php?controller=cliente&action=verCarrito">
                         <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
-                        <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">7</span>
+                        <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">
+                            <?= $contadorCarrito ?>
+                        </span>
                     </a>
-                    <a class="nav-icon position-relative text-decoration-none" href="#">
+                    <a class="nav-icon position-relative text-decoration-none" href="index.php?controller=perfil&action=index">
                         <i class="fa fa-fw fa-user text-dark mr-3"></i>
-                        <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">+99</span>
+                        <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">
+                            <?php echo isset($_SESSION['nombre']) ? $_SESSION['nombre'] : 'Invitado'; ?>
+                        </span>
                     </a>
                 </div>
             </div>
@@ -84,7 +85,6 @@
             <li data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="2"></li>
         </ol>
         <div class="carousel-inner">
-            <!-- Banner items -->
             <div class="carousel-item active">
                 <div class="container">
                     <div class="row p-5">
@@ -93,15 +93,49 @@
                         </div>
                         <div class="col-lg-6 mb-0 d-flex align-items-center">
                             <div class="text-align-left align-self-center">
-                                <h1 class="h1 text-success"><b>Tienda V</b> eCommerce</h1>
-                                <h3 class="h2">Tiny and Perfect eCommerce Template</h3>
-                                <p>Zay Shop es una plantilla eCommerce HTML5 CSS con la última versión de Bootstrap 5.</p>
+                                <h1 class="h1 text-success">Atención al Cliente 24/7</h1>
+                                <p>
+                                    Nuestro equipo está disponible para ayudarte en cualquier momento. Si tienes dudas sobre tu compra, envíos, devoluciones o asesoría de productos, estamos listos para atenderte por chat, correo o teléfono. Tu satisfacción es nuestra prioridad.
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- Agrega aquí los demás slides si quieres -->
+            <div class="carousel-item">
+                <div class="container">
+                    <div class="row p-5">
+                        <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
+                            <img class="img-fluid" src="./assets/img/banner_img_02.png" alt="">
+                        </div>
+                        <div class="col-lg-6 mb-0 d-flex align-items-center">
+                            <div class="text-align-left">
+                                <h1 class="h1">Pedidos Internacionales</h1>
+                                <p>
+                                    Enviamos productos a cualquier parte del mundo con total seguridad. Trabajamos con empresas de logística confiables para garantizar que tu pedido llegue en perfecto estado y en el menor tiempo posible. Consulta disponibilidad y tiempos de entrega según tu país.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="container">
+                    <div class="row p-5">
+                        <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
+                            <img class="img-fluid" src="./assets/img/banner_img_03.png" alt="">
+                        </div>
+                        <div class="col-lg-6 mb-0 d-flex align-items-center">
+                            <div class="text-align-left">
+                                <h1 class="h1">Pagos Seguros</h1>
+                                <p>
+                                    Protegemos tus transacciones con sistemas de seguridad certificados. Aceptamos tarjetas, transferencias y múltiples métodos de pago confiables. Compra con total tranquilidad y sin riesgos: tus datos siempre están protegidos.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <a class="carousel-control-prev text-decoration-none w-auto ps-3" href="#template-mo-zay-hero-carousel" role="button" data-bs-slide="prev">
             <i class="fas fa-chevron-left"></i>
@@ -117,7 +151,7 @@
         <div class="container py-5">
             <div class="row text-center py-3">
                 <div class="col-lg-6 m-auto">
-                    <h1 class="h1">Productos destacados</h1>
+                    <h1 class="h1">Recien Agregados</h1>
                     <p>Explora nuestros productos más destacados, una selección especial de las prendas que marcan tendencia esta temporada</p>
                 </div>
             </div>
@@ -130,13 +164,7 @@
                         </a>
                         <div class="card-body">
                             <ul class="list-unstyled d-flex justify-content-between">
-                                <li>
-                                    <i class="text-warning fa fa-star"></i>
-                                    <i class="text-warning fa fa-star"></i>
-                                    <i class="text-warning fa fa-star"></i>
-                                    <i class="text-muted fa fa-star"></i>
-                                    <i class="text-muted fa fa-star"></i>
-                                </li>
+                                <!-- Aqui estaban las estrellas, pero no tenian funcionalidad -->
                                 <li class="text-muted text-right">$<?php echo number_format($prod['precio'],2); ?></li>
                             </ul>
                             <a href="shop-single.html" class="h2 text-decoration-none text-dark"><?php echo $prod['nombre_producto']; ?></a>
@@ -145,11 +173,13 @@
                         </div>
                     </div>
                 </div>
+
                 <?php endforeach; ?>
             </div>
         </div>
     </section>
     <!-- End Featured Product -->
+
 
     <!-- Footer -->
     <footer class="bg-dark" id="tempaltemo_footer">
@@ -166,20 +196,17 @@
                 <div class="col-md-4 pt-5">
                     <h2 class="h2 text-light border-bottom pb-3 border-light">Productos</h2>
                     <ul class="list-unstyled text-light footer-link-list">
-                        <li><a class="text-decoration-none" href="shop.html">Tendencias</a></li>
-                        <li><a class="text-decoration-none" href="shop.html">Ropa hombre</a></li>
-                        <li><a class="text-decoration-none" href="shop.html">Ropa mujer</a></li>
-                        <li><a class="text-decoration-none" href="shop.html">Ropa niños</a></li>
-                        <li><a class="text-decoration-none" href="shop.html">Regalos</a></li>
+                        <li><a class="text-decoration-none" href="index.php?controller=tienda&action=index">Ropa hombre</a></li>
+                        <li><a class="text-decoration-none" href="index.php?controller=tienda&action=index">Ropa mujer</a></li>
                     </ul>
                 </div>
                 <div class="col-md-4 pt-5">
                     <h2 class="h2 text-light border-bottom pb-3 border-light">Información</h2>
                     <ul class="list-unstyled text-light footer-link-list">
-                        <li><a class="text-decoration-none" href="index.php">Inicio</a></li>
-                        <li><a class="text-decoration-none" href="about.html">Sobre nosotros</a></li>
+                        <li><a class="text-decoration-none" href="index.php?controller=home&action=index">Inicio</a></li>
+                        <li><a class="text-decoration-none" href="index.php?controller=home&action=about">Sobre nosotros</a></li>
                         <li><a class="text-decoration-none" href="#">FAQs</a></li>
-                        <li><a class="text-decoration-none" href="contact.html">Contacto</a></li>
+                        <li><a class="text-decoration-none" href="#">Contacto</a></li>
                     </ul>
                 </div>
             </div>
@@ -192,10 +219,11 @@
     </footer>
     <!-- End Footer -->
 
-    <script src="assets/js/jquery-1.11.0.min.js"></script>
-    <script src="assets/js/jquery-migrate-1.2.1.min.js"></script>
-    <script src="assets/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/templatemo.js"></script>
-    <script src="assets/js/custom.js"></script>
+    <script src="/proyectos/proyecto1/assets/js/jquery-1.11.0.min.js"></script>
+    <script src="/proyectos/proyecto1/assets/js/jquery-migrate-1.2.1.min.js"></script>
+    <script src="/proyectos/proyecto1/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="/proyectos/proyecto1/assets/js/templatemo.js"></script>
+    <script src="/proyectos/proyecto1/assets/js/custom.js"></script>
+
 </body>
 </html>
