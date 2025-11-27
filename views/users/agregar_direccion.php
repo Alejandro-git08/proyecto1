@@ -15,7 +15,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/fontawesome.min.css">
 </head>
-<body>
+<body class="bg-light">
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">

@@ -7,24 +7,22 @@ class TiendaController {
     private $productoModel;
     private $carritoModel;
 
-    public function __construct() {
-        $db = new Database();
-        $conexion = $db->getConnection();
+    public function __construct($conexion) {
+        /*$db = new Database();
+        $conexion = $db->getConnection();*/
 
         $this->productoModel = new Producto($conexion);
         $this->carritoModel = new Carrito($conexion);
     }
 
     public function index() {
-                // Leer filtros desde la URL
-        $genero = $_GET['genero'] ?? 'todos';      // 'todos', 'hombre', 'mujer'
-        $categoria = $_GET['categoria'] ?? null;   // id de categoría o null
-        if ($categoria === '') $categoria = null;  // si viene vacío, pasar null
 
-        // Obtener productos filtrados
+        $genero = $_GET['genero'] ?? 'todos';      
+        $categoria = $_GET['categoria'] ?? null; 
+        if ($categoria === '') $categoria = null;  
+
         $productos = $this->productoModel->listar($genero, $categoria);
 
-        // Obtener subcategorías según género para el filtro lateral
         $categoriasHombre = $this->productoModel->listarCategorias(1); // id_padre = 1
         $categoriasMujer  = $this->productoModel->listarCategorias(2); // id_padre = 2
 

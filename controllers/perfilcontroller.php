@@ -4,20 +4,16 @@ require_once "models/Direccion.php";
 
 class perfilcontroller {
 
-    private $conexion;
     private $usuarioModel;
     private $direccionModel;
 
     public function __construct($conexion) {
-        $this->conexion = $conexion;
 
-        // Modelos
-        $this->usuarioModel = new Usuario();
+        $this->usuarioModel = new Usuario($conexion);
         $this->direccionModel = new Direccion($conexion);
     }
 
     public function index() {
-        // Verificar sesión
         if (!isset($_SESSION['id_usuario'])) {
             header("Location: index.php?controller=login&action=index");
             exit;
@@ -25,13 +21,10 @@ class perfilcontroller {
 
         $id_usuario = $_SESSION['id_usuario'];
 
-        // Obtener datos del usuario
         $usuario = $this->usuarioModel->obtenerUsuario($id_usuario);
 
-        // Obtener direcciones del usuario
         $direcciones = $this->direccionModel->listarPorUsuario($id_usuario);
 
-        // Cargar vista
         require_once "views/users/perfil.php";
     }
 
@@ -48,21 +41,27 @@ class perfilcontroller {
     }
 
     public function actualizar() {
+
         if (!isset($_SESSION['id_usuario'])) {
             header("Location: index.php?controller=login&action=index");
             exit;
         }
 
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header("Location: index.php?controller=perfil&action=index");
+            exit;
+        }
+
         $id = $_SESSION['id_usuario'];
 
-        $nombre = $_POST['nombre'];
-        $apellido = $_POST['apellido'];
-        $email = $_POST['email'];
-        $telefono = $_POST['telefono'];
+        $nombre   = trim($_POST['nombre']);
+        $apellido = trim($_POST['apellido']);
+        $email    = trim($_POST['email']);
+        $telefono = trim($_POST['telefono']);
 
         $this->usuarioModel->actualizar(
             $id,
-            "cliente", // solo versión cliente
+            "cliente", 
             $nombre,
             $apellido,
             $email,
@@ -70,6 +69,7 @@ class perfilcontroller {
         );
 
         header("Location: index.php?controller=perfil&action=index");
+        exit;
     }
 
     public function logout() {
@@ -77,7 +77,6 @@ class perfilcontroller {
         session_unset();
         session_destroy();
 
-        // Borrar cookie de recordarme si existe
         if(isset($_COOKIE['usuario_logueado'])) {
             setcookie('usuario_logueado', '', time() - 3600, "/");
         }

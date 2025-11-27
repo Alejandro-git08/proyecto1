@@ -3,13 +3,18 @@ require_once 'models/usuario.php';
 
 class logincontroller {
 
-    // Mostrar formulario de login
+    private $usuarioModel;
+
+    public function __construct($conexion) {
+        $this->usuarioModel = new Usuario($conexion);
+    }
+
     public function index() {
 
         // Verificar cookie
         if (!isset($_SESSION['id_usuario']) && isset($_COOKIE['usuario_logueado'])) {
-            $usuario = new usuario();
-            $user = $usuario->getById($_COOKIE['usuario_logueado']); // Método que ya definimos en el modelo
+            
+            $user = $this->usuarioModel->getById($_COOKIE['usuario_logueado']);
 
             if ($user) {
                 $_SESSION['id_usuario'] = $user['id_usuario'];
@@ -33,20 +38,17 @@ class logincontroller {
             $email = $_POST['email'];
             $password = $_POST['password'];
 
-            $usuario = new usuario();
-            $user = $usuario->login($email, $password);
+            $user = $this->usuarioModel->login($email, $password);
 
             if ($user) {
                 $_SESSION['id_usuario'] = $user['id_usuario'];
                 $_SESSION['nombre'] = $user['nombre'];
                 $_SESSION['rol'] = $user['rol'];
 
-                // Crear cookie para mantener sesión (30 días)
                 if (isset($_POST['recordarme'])) {
                     setcookie('usuario_logueado', $user['id_usuario'], time() + (30*24*60*60), "/"); // 30 días
                 }
 
-                // Redirigir siempre a home index; el homecontroller decidirá la vista
                 header('Location: index.php?controller=home&action=index');
                 exit;
             } else {
@@ -54,18 +56,17 @@ class logincontroller {
                 require 'views/login.php';
             }
         } else {
-            // Si no hay email o password, redirigir a login
+
             header('Location: index.php?controller=login&action=index');
             exit;
         }
     }
 
-    // Mostrar formulario de registro
+   
     public function registrar() {
         require 'views/registro.php';
     }
 
-    // Procesar registro
     public function crear_usuario() {
         if (isset($_POST['nombre'], $_POST['apellido'], $_POST['email'], $_POST['password'])) {
             $rol = 'cliente'; // por defecto
@@ -75,10 +76,8 @@ class logincontroller {
             $contrasena = $_POST['password'];
             $telefono = $_POST['telefono'] ?? null;
 
-            $usuario = new usuario();
-            $usuario->crear($rol, $nombre, $apellido, $email, $contrasena, $telefono);
+            $this->usuarioModel->crear($rol, $nombre, $apellido, $email, $contrasena, $telefono);
 
-            // Redirigir al login
             header('Location: index.php?controller=login&action=index');
             exit;
         } else {
@@ -88,16 +87,14 @@ class logincontroller {
     }
 
     public function logout(){
-        session_start();   // Asegúrate de iniciar sesión
-        session_unset();   // Limpia variables de sesión
-        session_destroy(); // Destruye la sesión
+        session_start();   
+        session_unset();   
+        session_destroy(); 
 
-        // Borrar cookie de recordarme si existe
         if(isset($_COOKIE['usuario_logueado'])) {
             setcookie('usuario_logueado', '', time() - 3600, "/");
         }
 
-        // Redirigir al login
         header("Location: index.php?controller=login&action=index");
         exit;
     }

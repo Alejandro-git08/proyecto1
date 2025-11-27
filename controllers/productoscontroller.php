@@ -5,30 +5,31 @@ class ProductosController {
     private $model;
     private $db;
 
-    public function __construct(){
-        try {
+    public function __construct($conexion){
+
+        $this->model = new Producto($conexion);
+
+        /*try {
             $this->db = new PDO("mysql:host=localhost;dbname=ecommerce;charset=utf8","root","");
             $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch(PDOException $e){
             die("Error de conexión: " . $e->getMessage());
         }
-        $this->model = new Producto($this->db);
+        $this->model = new Producto($this->db);*/
     }
 
     public function verProductos(){
-        $categorias = $this->model->listarCategorias(); // Necesario para el select
+        $categorias = $this->model->listarCategorias(); 
 
         $id_buscar = $_GET['id_buscar'] ?? null;
         $categoria_buscar = $_GET['categoria_buscar'] ?? null;
 
-        $productos = $this->model->listar(); // Lista todos inicialmente
+        $productos = $this->model->listar(); 
 
-        // Filtrar por ID
         if($id_buscar){
             $productos = array_filter($productos, fn($p) => isset($p['id_producto']) && $p['id_producto'] == $id_buscar);
         }
 
-        // Filtrar por categoría
         if($categoria_buscar){
             $productos = array_filter($productos, fn($p) => $p['categoria'] == $categoria_buscar);
         }
@@ -38,7 +39,7 @@ class ProductosController {
 
     public function crear(){
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
-            // Manejo de imagen
+
             $nombreImagen = null;
             if(isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK){
                 $carpetaDestino = "assets/img/productos/";
@@ -66,7 +67,6 @@ class ProductosController {
             header("Location: index.php?controller=productos&action=verProductos");
             exit;
         } else {
-            // ✅ Aquí cargamos las categorías para la vista
             $categorias = $this->model->listarCategorias();
             require_once "views/admin/productos/productos_crear.php";
         }

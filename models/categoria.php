@@ -6,7 +6,7 @@ class Categoria {
         $this->db = $conexion;
     }
 
-    // Listar categorías (excluyendo id 1 y 2)
+    // Listar categorías (para id 1 y 2)
     public function listar($genero = "todos") {
         $sql = "CALL listar_categorias()";
         $stmt = $this->db->prepare($sql);

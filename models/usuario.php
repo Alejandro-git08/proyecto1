@@ -4,9 +4,13 @@ require_once 'config/database.php';
 class usuario {
     private $db;
 
-    public function __construct() {
+    /*public function __construct() {
         $database = new Database();
         $this->db = $database->getConnection();
+    }*/
+
+    public function __construct($conexion) {
+        $this->db = $conexion;
     }
 
     public function login($email, $password) {
@@ -67,6 +71,26 @@ class usuario {
         ");
 
         $stmt->bindParam(':rol', $rol);
+        $stmt->bindParam(':nombre', $nombre);
+        $stmt->bindParam(':apellido', $apellido);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':telefono', $telefono);
+        $stmt->bindParam(':id', $id_usuario);
+
+        return $stmt->execute();
+    }
+
+
+    public function actualizarCliente($id_usuario, $nombre, $apellido, $email, $telefono) {
+        $stmt = $this->db->prepare("
+            UPDATE Usuario 
+            SET nombre = :nombre,
+                apellido = :apellido,
+                email = :email,
+                telefono = :telefono
+            WHERE id_usuario = :id
+        ");
+
         $stmt->bindParam(':nombre', $nombre);
         $stmt->bindParam(':apellido', $apellido);
         $stmt->bindParam(':email', $email);

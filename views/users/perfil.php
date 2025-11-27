@@ -16,9 +16,7 @@
     <link rel="stylesheet" href="assets/css/fontawesome.min.css">
 
     <style>
-        body {
-            background: #f5f5f5;
-        }
+
         .panel {
             background: white;
             border-radius: 10px;
@@ -46,7 +44,7 @@
     </style>
 
 </head>
-<body>
+<body class="bg-light">
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">

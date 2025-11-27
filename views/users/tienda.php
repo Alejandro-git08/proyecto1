@@ -23,7 +23,7 @@
         .categoria-item.activa { font-weight: bold; color: #c2185b; }
     </style>
 </head>
-<body>
+<body class="bg-light">
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
         <a class="navbar-brand" href="index.php?controller=home&action=index">Tienda V</a>
@@ -41,80 +41,80 @@
     </div>
 </nav>
 
-<div class="container py-5">
-    <h2 class="mb-4 text-center">Tienda</h2>
+    <div class="container py-5 bg-light">
+        <h2 class="mb-4 text-center">Tienda</h2>
 
-    <!-- Filtro de género arriba de los productos -->
-    <div class="filtro-genero mb-4 text-center">
-        <?php 
-            $generos = ['todos' => 'Todos', 'hombre' => 'Hombres', 'mujer' => 'Mujeres'];
-            foreach($generos as $key => $label): 
-                $clase = ($key == ($genero ?? 'todos')) ? 'activo' : '';
-        ?>
-            <span class="<?= $clase ?>" onclick="aplicarFiltroGenero('<?= $key ?>')"><?= $label ?></span>
-        <?php endforeach; ?>
-    </div>
-
-    <div class="row">
-        <!-- Sidebar filtros -->
-        <div class="col-md-3">
-            <div class="sidebar">
-                <h6>Departamento</h6>
-                <?php foreach($generos as $key => $label): 
+        <!-- Filtro de género arriba de los productos -->
+        <div class="filtro-genero mb-4 text-center">
+            <?php 
+                $generos = ['todos' => 'Todos', 'hombre' => 'Hombres', 'mujer' => 'Mujeres'];
+                foreach($generos as $key => $label): 
                     $clase = ($key == ($genero ?? 'todos')) ? 'activo' : '';
-                ?>
-                    <span class="<?= $clase ?>" onclick="aplicarFiltroGenero('<?= $key ?>')"><?= $label ?></span><br>
-                <?php endforeach; ?>
-
-                <h6>Categorías</h6>
-                <?php
-                    $categoriasMostrar = [];
-                    if(($genero ?? 'todos') == 'hombre') $categoriasMostrar = $categoriasHombre;
-                    elseif(($genero ?? 'todos') == 'mujer') $categoriasMostrar = $categoriasMujer;
-                    elseif(($genero ?? 'todos') == 'todos') $categoriasMostrar = array_merge($categoriasHombre, $categoriasMujer);
-
-                    foreach($categoriasMostrar as $cat):
-                        $clase = ($cat['id_categoria'] == ($categoria ?? '')) ? 'activa' : '';
-                ?>
-                    <span class="categoria-item <?= $clase ?>" onclick="aplicarFiltroCategoria('<?= $cat['id_categoria'] ?>')"><?= $cat['nombre_categoria'] ?></span>
-                <?php endforeach; ?>
-            </div>
+            ?>
+                <span class="<?= $clase ?>" onclick="aplicarFiltroGenero('<?= $key ?>')"><?= $label ?></span>
+            <?php endforeach; ?>
         </div>
 
-        <!-- Productos -->
-        <div class="col-md-9">
-            <div class="row">
-                <?php foreach($productos as $prod): ?>
-                    <div class="col-md-4 mb-4">
-                        <div class="card h-100 shadow-sm border-0 rounded-3">
-                            <div class="position-relative">
-                                <img src="<?php echo $prod['imagen']; ?>" class="card-img-top rounded-top" alt="<?php echo $prod['nombre_producto']; ?>">
-                                <div class="position-absolute top-0 end-0 p-2">
-                                    <span class="badge bg-<?php echo $prod['stock'] > 0 ? 'success' : 'secondary'; ?>">
-                                        <?php echo $prod['stock'] > 0 ? 'Disponible' : 'Agotado'; ?>
-                                    </span>
+        <div class="row">
+            <!-- Sidebar filtros -->
+            <div class="col-md-3">
+                <div class="sidebar">
+                    <h6>Departamento</h6>
+                    <?php foreach($generos as $key => $label): 
+                        $clase = ($key == ($genero ?? 'todos')) ? 'activo' : '';
+                    ?>
+                        <span class="<?= $clase ?>" onclick="aplicarFiltroGenero('<?= $key ?>')"><?= $label ?></span><br>
+                    <?php endforeach; ?>
+
+                    <h6>Categorías</h6>
+                    <?php
+                        $categoriasMostrar = [];
+                        if(($genero ?? 'todos') == 'hombre') $categoriasMostrar = $categoriasHombre;
+                        elseif(($genero ?? 'todos') == 'mujer') $categoriasMostrar = $categoriasMujer;
+                        elseif(($genero ?? 'todos') == 'todos') $categoriasMostrar = array_merge($categoriasHombre, $categoriasMujer);
+
+                        foreach($categoriasMostrar as $cat):
+                            $clase = ($cat['id_categoria'] == ($categoria ?? '')) ? 'activa' : '';
+                    ?>
+                        <span class="categoria-item <?= $clase ?>" onclick="aplicarFiltroCategoria('<?= $cat['id_categoria'] ?>')"><?= $cat['nombre_categoria'] ?></span>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+
+            <!-- Productos -->
+            <div class="col-md-9">
+                <div class="row">
+                    <?php foreach($productos as $prod): ?>
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100 shadow-sm border-0 rounded-3">
+                                <div class="position-relative">
+                                    <img src="<?php echo $prod['imagen']; ?>" class="card-img-top rounded-top" alt="<?php echo $prod['nombre_producto']; ?>">
+                                    <div class="position-absolute top-0 end-0 p-2">
+                                        <span class="badge bg-<?php echo $prod['stock'] > 0 ? 'success' : 'secondary'; ?>">
+                                            <?php echo $prod['stock'] > 0 ? 'Disponible' : 'Agotado'; ?>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title"><?php echo $prod['nombre_producto']; ?></h5>
+                                    <p class="card-text text-muted small"><?php echo $prod['descripcion_producto']; ?></p>
+                                    <p class="text-success fw-bold mb-3">$<?php echo number_format($prod['precio'],2); ?></p>
+                                    <p class="text-muted">Stock: <?php echo $prod['stock']; ?></p>
+                                    <form action="index.php?controller=tienda&action=agregarAlCarrito" method="POST" class="mt-auto">
+                                        <input type="hidden" name="id_producto" value="<?php echo $prod['id_producto']; ?>">
+                                        <div class="input-group mb-2">
+                                            <input type="number" name="cantidad" value="1" min="1" class="form-control">
+                                            <button type="submit" class="btn btn-success">Agregar</button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title"><?php echo $prod['nombre_producto']; ?></h5>
-                                <p class="card-text text-muted small"><?php echo $prod['descripcion_producto']; ?></p>
-                                <p class="text-success fw-bold mb-3">$<?php echo number_format($prod['precio'],2); ?></p>
-                                <p class="text-muted">Stock: <?php echo $prod['stock']; ?></p>
-                                <form action="index.php?controller=tienda&action=agregarAlCarrito" method="POST" class="mt-auto">
-                                    <input type="hidden" name="id_producto" value="<?php echo $prod['id_producto']; ?>">
-                                    <div class="input-group mb-2">
-                                        <input type="number" name="cantidad" value="1" min="1" class="form-control">
-                                        <button type="submit" class="btn btn-success">Agregar</button>
-                                    </div>
-                                </form>
-                            </div>
                         </div>
-                    </div>
-                <?php endforeach; ?>
+                    <?php endforeach; ?>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
     <!-- Footer -->
     <footer class="bg-dark" id="tempaltemo_footer">
@@ -157,7 +157,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     function aplicarFiltroGenero(genero){
-        const categoria = ''; // resetear categoría al cambiar género
+        const categoria = ''; 
         window.location.href = `index.php?controller=tienda&action=index&genero=${genero}&categoria=${categoria}`;
     }
 

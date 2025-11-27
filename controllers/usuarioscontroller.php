@@ -3,10 +3,10 @@ class UsuariosController {
 
     private $usuarioModel;
 
-    public function __construct() {
+   public function __construct($conexion) {
         require_once "models/Usuario.php";
-        $this->usuarioModel = new Usuario();
-    }
+        $this->usuarioModel = new Usuario($conexion);
+    } 
 
     public function index() {
         $rolFiltro = isset($_GET['rol']) ? $_GET['rol'] : "todos";
@@ -59,7 +59,6 @@ class UsuariosController {
         $this->usuarioModel->eliminar($id);
         header("Location: index.php?controller=usuarios&action=index");
     }
-
 
 }
 

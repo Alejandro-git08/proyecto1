@@ -5,7 +5,6 @@ if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] != 'admin') {
     exit;
 }
 
-// Se asume que $usuario viene del controlador
 ?>
 
 <!DOCTYPE html>

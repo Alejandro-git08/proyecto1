@@ -1,25 +1,26 @@
 <?php
 require_once 'models/Producto.php';
 require_once 'models/Carrito.php';
-require_once 'controllers/direccioncontroller.php';
+require_once 'models/Direccion.php'; 
 
 class ClienteController {
     private $conexion;
 
     public function __construct($conexion){
-        $this->conexion = $conexion; // objeto PDO
+        $this->conexion = $conexion; 
     }
 
     // Mostrar todos los productos
     public function verProductos() {
         $productoModel = new Producto($this->conexion);
         $productos = $productoModel->listar();
+
         require 'views/users/tienda.php';
     }
 
     // Agregar producto al carrito
     public function agregarAlCarrito() {
-        if(!isset($_SESSION['id_usuario'])) {
+        if (!isset($_SESSION['id_usuario'])) {
             header("Location: index.php?controller=login&action=index");
             exit;
         }
@@ -36,25 +37,27 @@ class ClienteController {
 
     // Ver carrito
     public function verCarrito() {
-        if(!isset($_SESSION['id_usuario'])) {
+        if (!isset($_SESSION['id_usuario'])) {
             header("Location: index.php?controller=login&action=index");
             exit;
         }
 
         $carritoModel = new Carrito($this->conexion);
         $productos = $carritoModel->listar($_SESSION['id_usuario']);
+
         require 'views/users/carrito.php';
     }
 
     // Eliminar producto del carrito
     public function eliminarDelCarrito() {
-        if(!isset($_SESSION['id_usuario'])) {
+        if (!isset($_SESSION['id_usuario'])) {
             header("Location: index.php?controller=login&action=index");
             exit;
         }
 
         $id_producto = $_GET['id_producto'] ?? null;
-        if($id_producto) {
+
+        if ($id_producto) {
             $carritoModel = new Carrito($this->conexion);
             $carritoModel->eliminar($_SESSION['id_usuario'], $id_producto);
         }
@@ -63,18 +66,19 @@ class ClienteController {
         exit;
     }
 
-    // Mostrar direcciones para elegir antes de comprar
     public function seleccionarDireccion() {
         if (!isset($_SESSION['id_usuario'])) {
             header("Location: index.php?controller=login&action=index");
             exit;
         }
 
-        $direccionController = new DireccionController($this->conexion);
-        $direccionController->seleccionar();
+        $direccionModel = new Direccion($this->conexion);
+        $direcciones = $direccionModel->listarPorUsuario($_SESSION['id_usuario']);
+
+        require 'views/users/seleccionar_direccion.php';
     }
 
-    // Comprar carrito con dirección seleccionada
+    // Comprar carrito
     public function comprarCarrito() {
         if (!isset($_SESSION['id_usuario'])) {
             header("Location: index.php?controller=login&action=index");
@@ -90,6 +94,7 @@ class ClienteController {
         }
 
         $carritoModel = new Carrito($this->conexion);
+
         try {
             $carritoModel->comprarCarrito($_SESSION['id_usuario'], $id_direccion, $metodo_pago);
             $mensaje = "¡Compra realizada con éxito!";
@@ -100,36 +105,32 @@ class ClienteController {
         require 'views/users/confirmacion.php';
     }
 
+    // Ver pedidos del usuario
     public function verPedidos() {
         if (!isset($_SESSION['id_usuario'])) {
             header("Location: index.php?controller=login&action=index");
             exit;
         }
 
-        $id_usuario = $_SESSION['id_usuario'];
         $carritoModel = new Carrito($this->conexion);
-        $pedidos = $carritoModel->obtenerPedidos($id_usuario);
+        $pedidos = $carritoModel->obtenerPedidos($_SESSION['id_usuario']);
 
         require 'views/users/pedidos.php';
     }
 
+    // Página home del cliente
     public function home() {
         if (!isset($_SESSION['id_usuario'])) {
             header("Location: index.php?controller=login&action=index");
             exit;
         }
 
-        // Contar productos en carrito
         $carritoModel = new Carrito($this->conexion);
         $contadorCarrito = $carritoModel->contar($_SESSION['id_usuario']);
 
-        // Traer productos destacados (opcional)
         $productoModel = new Producto($this->conexion);
         $productos = $productoModel->listar();
 
-        // Cargar vista
         require 'views/users/home.php';
     }
-
-
 }

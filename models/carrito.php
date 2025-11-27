@@ -91,7 +91,7 @@ class Carrito {
         return $resultado['total'] ?? 0;
     }
 
- // Comprar carrito con procedimiento almacenado
+    // Comprar carrito
     public function comprarCarrito($id_usuario, $id_direccion, $metodo_pago = 'simulado') {
         try {
             $stmt = $this->conexion->prepare("CALL comprar_carrito(:id_usuario, :metodo_pago, :id_direccion)");
@@ -109,14 +109,11 @@ class Carrito {
         $stmt = $this->conexion->prepare("CALL ver_pedidos_usuario(:id_usuario)");
         $stmt->execute(['id_usuario' => $id_usuario]);
 
-        // Primer result set: órdenes
         $ordenes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        // Siguiente result set: productos
         $stmt->nextRowset();
         $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        // Organizar productos por id_orden
         $detalle_por_orden = [];
         foreach ($productos as $prod) {
             $detalle_por_orden[$prod['id_orden']][] = $prod;

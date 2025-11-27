@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="assets/css/templatemo.css">
     <link rel="stylesheet" href="assets/css/custom.css">
 </head>
-<body>
+<body class="bg-light">
     <div class="container py-5">
         <div class="row justify-content-center">
             <div class="col-md-6 col-lg-5">

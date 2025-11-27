@@ -15,7 +15,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/fontawesome.min.css">
 </head>
-<body>
+<body class="bg-light">
 
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
@@ -33,32 +33,30 @@
         </div>
     </nav>
 
-<div class="container py-5">
-    <h2 class="mb-4">Agregar Dirección</h2>
-    <form method="POST" action="index.php?controller=direccion&action=guardarDesdePerfil">
-        <div class="mb-3">
-            <input type="text" name="pais" class="form-control" placeholder="País" required>
-        </div>
-        <div class="mb-3">
-            <input type="text" name="provincia" class="form-control" placeholder="Provincia">
-        </div>
-        <div class="mb-3">
-            <input type="text" name="distrito" class="form-control" placeholder="Distrito">
-        </div>
-        <div class="mb-3">
-            <input type="text" name="calle" class="form-control" placeholder="Calle" required>
-        </div>
-        <div class="mb-3">
-            <input type="text" name="codigo_postal" class="form-control" placeholder="Código Postal">
-        </div>
-        <div class="mb-3">
-            <textarea name="detalles_direccion" class="form-control" placeholder="Detalles de la dirección"></textarea>
-        </div>
-        <button type="submit" class="btn btn-success w-100">Guardar Dirección</button>
-    </form>
-
-
-</div>
+    <div class="container py-5">
+        <h2 class="mb-4">Agregar Dirección</h2>
+        <form method="POST" action="index.php?controller=direccion&action=guardarDesdePerfil">
+            <div class="mb-3">
+                <input type="text" name="pais" class="form-control" placeholder="País" required>
+            </div>
+            <div class="mb-3">
+                <input type="text" name="provincia" class="form-control" placeholder="Provincia">
+            </div>
+            <div class="mb-3">
+                <input type="text" name="distrito" class="form-control" placeholder="Distrito">
+            </div>
+            <div class="mb-3">
+                <input type="text" name="calle" class="form-control" placeholder="Calle" required>
+            </div>
+            <div class="mb-3">
+                <input type="text" name="codigo_postal" class="form-control" placeholder="Código Postal">
+            </div>
+            <div class="mb-3">
+                <textarea name="detalles_direccion" class="form-control" placeholder="Detalles de la dirección"></textarea>
+            </div>
+            <button type="submit" class="btn btn-success w-100">Guardar Dirección</button>
+        </form>
+    </div>
 
     <!-- Footer -->
     <footer class="bg-dark" id="tempaltemo_footer">

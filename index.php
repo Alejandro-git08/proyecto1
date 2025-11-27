@@ -1,13 +1,18 @@
 <?php
+require_once "config/database.php";
 session_start();
 
-// Conexión a la base de datos con PDO
-try {
+/*y {
     $conexion = new PDO("mysql:host=localhost;dbname=ecommerce;charset=utf8", "root", "");
     $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch(PDOException $e) {
     die("Error de conexión: " . $e->getMessage());
-}
+}*/
+
+// Conexión a la base de datos con PDO
+$database = new Database();
+$conexion = $database->getConnection();
+
 
 // Definir controlador y acción por defecto
 $controller = isset($_GET['controller']) ? $_GET['controller'] : 'login';
@@ -19,11 +24,11 @@ $controllerFile = "controllers/" . strtolower($controller) . "controller.php";
 if (file_exists($controllerFile)) {
     require_once $controllerFile;
 
-    // Clase del controlador (minúscula)
+    // Clase del controlador
     $controllerClass = strtolower($controller) . "controller";
 
     if (class_exists($controllerClass)) {
-        // PASAMOS la conexión PDO al controlador
+        
         $controllerInstance = new $controllerClass($conexion);
 
         if (method_exists($controllerInstance, $action)) {

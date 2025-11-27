@@ -3,17 +3,21 @@ require_once "models/Categoria.php";
 
 class CategoriasController {
     private $model;
-    private $db;
+    private $conexion;
 
-    public function __construct() {
-        try {
+    public function __construct($conexion) {
+
+        $this->conexion = $conexion;
+        $this->model = new Categoria($conexion);
+
+        /*try {
             $this->db = new PDO("mysql:host=localhost;dbname=ecommerce;charset=utf8", "root", "");
             $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
             die("Error de conexión: " . $e->getMessage());
         }
 
-        $this->model = new Categoria($this->db);
+        $this->model = new Categoria($this->db);*/
     }
 
     public function index() {

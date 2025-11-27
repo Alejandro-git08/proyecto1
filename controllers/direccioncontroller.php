@@ -23,12 +23,10 @@ class DireccionController {
         require_once "views/users/seleccionar_direccion.php";
     }
 
-    // Crear nueva dirección
     public function crear() {
         require_once "views/users/agregar_direccion.php";
     }
 
-    // Guardar dirección nueva
     public function guardar() {
         if(!isset($_SESSION['id_usuario'])) {
             header("Location: index.php?controller=login&action=index");
@@ -65,7 +63,6 @@ class DireccionController {
 
         $this->direccionModel->crear($id_usuario, $pais, $provincia, $distrito, $calle, $codigo_postal, $detalles);
 
-        // ► REGRESAR AL PERFIL
         header("Location: index.php?controller=perfil&action=index");
         exit;
     }
@@ -84,15 +81,12 @@ class DireccionController {
         if (isset($_POST['id_direccion'])) {
             $idDireccion = $_POST['id_direccion'];
 
-            // ✔ usar el modelo que ya tiene la conexión
             $this->direccionModel->eliminarPorId($idDireccion);
         }
 
-        // ✔ Regresar al perfil
         header("Location: index.php?controller=perfil&action=index");
         exit();
     }
-
 
 
 }
